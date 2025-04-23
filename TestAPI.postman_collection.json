@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "20933378-037e-45d3-894f-f5f8f4821a72",
+		"name": "TestAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37445911"
+	},
+	"item": [
+		{
+			"name": "Test Disponibilité Produit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Statut HTTP 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Réponse en JSON\", function () {\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Produit trouvé ou non\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"isSuccess\");\r",
+							"    if (jsonData.isSuccess) {\r",
+							"        pm.expect(jsonData).to.have.property(\"data\");\r",
+							"        console.log(\"Quantité disponible :\", jsonData.data.quantity);\r",
+							"        pm.test(\"La quantité est supérieure ou égale à 0\", function () {\r",
+							"            pm.expect(jsonData.data.quantity).to.be.at.least(0);\r",
+							"        });\r",
+							"    } else {\r",
+							"        console.warn(\"Produit non trouvé ou erreur : \", jsonData.message);\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "mdw@@2025",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "qa-test",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://recrutement.arvea-test.ovh/stock/getQuantity?product_config_id=101&stock_type=depot&depot_id=2\n",
+					"protocol": "https",
+					"host": [
+						"recrutement",
+						"arvea-test",
+						"ovh"
+					],
+					"path": [
+						"stock",
+						"getQuantity"
+					],
+					"query": [
+						{
+							"key": "product_config_id",
+							"value": "101"
+						},
+						{
+							"key": "stock_type",
+							"value": "depot"
+						},
+						{
+							"key": "depot_id",
+							"value": "2\n"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
